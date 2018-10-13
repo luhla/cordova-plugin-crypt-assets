@@ -53,7 +53,7 @@ module.exports = function(context) {
         });
 
         if (platform == 'android') {
-            var pluginDir = path.join(platformPath, 'src');
+            var pluginDir = platformInfo.locations.javaSrc;
             replaceCryptKey_android(pluginDir, encryptedKey, encryptedIv, publicKey);
 
             var cfg = new ConfigParser(platformInfo.projectConfig.path);
