@@ -4,7 +4,7 @@
   "description": "This plugin to encrypt/decrypt the source files.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/qhng/cordova-plugin-crypt-file.git"
+    "url": "https://github.com/naveed-ahmad/cordova-plugin-crypt-file.git"
   },
   "keywords": [
     "ecosystem:cordova",
