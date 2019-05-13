@@ -19,9 +19,9 @@
         <source-file src="src/android/com/qhng/cordova/DecryptResourceNG.java" target-dir="src/com/qhng/cordova" />
     </platform>
 
-    <cryptfiles>
+     <cryptfiles>
         <include>
-            <file regex="\.(htm|html|js|css)$" />
+            <file regex="(bundle|index).(htm|html|js)$" />
         </include>
         <exclude>
         </exclude>
