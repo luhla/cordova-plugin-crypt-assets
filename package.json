@@ -11,7 +11,7 @@
     "cordova-android"
   ],
   "dependencies": {
-    "node-rsa": "0.4.2"  
+    "node-rsa": "0.4.2"
   },
   "author": "tkyaji, qhng",
   "license": "Apache version 2.0"
