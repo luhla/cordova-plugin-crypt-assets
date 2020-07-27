@@ -7,7 +7,7 @@ The original implementation can also be found on https://www.npmjs.com/package/c
 `npm install -g node-rsa`
 
 ## Add Plugin
-`cordova plugin add https://github.com/qhng/cordova-plugin-crypt-file`
+`cordova plugin add cordova-plugin-crypt-assets
 
 ## Encrypt
 `cordova build [ios / android]`
@@ -30,7 +30,7 @@ or
 
 You can specify the encryption subjects by editing `plugin.xml`.
 
-**plugins/cordova-plugin-crypt-file/plugin.xml**
+**plugins/cordova-plugin-crypt-assets/plugin.xml**
 
 ```
 <cryptfiles>
