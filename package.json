@@ -1,18 +1,19 @@
 {
   "name": "cordova-plugin-crypt-assets",
-  "version": "0.1.1",
-  "description": "This plugin to encrypt/decrypt the source files.",
+  "version": "0.2.0",
+  "description": "Cordova plugin to encrypt/decrypt the source assets.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/naveed-ahmad/cordova-plugin-crypt-file.git"
+    "url": "https://github.com/naveed-ahmad/cordova-plugin-crypt-assets"
   },
   "keywords": [
     "ecosystem:cordova",
-    "cordova-android"
+    "cordova-android",
+    "assets-encryption"
   ],
   "dependencies": {
     "node-rsa": "0.4.2"
   },
-  "author": "tkyaji, qhng",
+  "author": "tkyaji, qhng, naveed-ahmad",
   "license": "Apache version 2.0"
 }

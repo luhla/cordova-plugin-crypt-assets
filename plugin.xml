@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-  id="cordova-plugin-crypt-file-ng"
-  version="0.1.1">
-
-    <name>CordovaCrypt</name>
-    <description>Plugin Description</description>
+  id="cordova-plugin-crypt-assets"
+  version="0.2.0">
+    <name>cordova-plugin-crypt-assets</name>
+    <description>Cordova plugin to encrypt/decrypt the source assets</description>
     <author>@tkyaji, @qhng, @naveed-ahmad</author>
     <license>Apache 2.0 License</license>
 
