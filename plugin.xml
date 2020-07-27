@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   id="cordova-plugin-crypt-file-ng"
-  version="0.1.0">
+  version="0.1.1">
 
     <name>CordovaCrypt</name>
     <description>Plugin Description</description>
-    <author>@tkyaji, @qhng</author>
+    <author>@tkyaji, @qhng, @naveed-ahmad</author>
     <license>Apache 2.0 License</license>
 
     <platform name="android">
