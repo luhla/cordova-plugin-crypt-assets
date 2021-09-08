@@ -30,7 +30,14 @@ module.exports = function(context) {
     console.log('key(P)=' + key + ', iv(P)=' + iv)
     console.log('key(E)=' + encryptedKey + ', iv(E)=' + encryptedIv)
 
-    var targetFiles = loadCryptFileTargets();
+    
+    var configXml = path.join(projectRoot, 'config.xml');
+
+    var targetFiles = loadCryptFileTargets(configXml);
+    if (targetFiles.include.length==0 && targetFiles.exclude.length==0) {
+        var pluginXml = path.join(context.opts.plugin.dir, 'plugin.xml');
+        targetFiles = loadCryptFileTargets(pluginXml);
+    }
 
     context.opts.platforms.filter(function(platform) {
         var pluginInfo = context.opts.plugin.pluginInfo;
@@ -89,15 +96,13 @@ module.exports = function(context) {
         return fileList;
     }
 
-    function loadCryptFileTargets() {
+    function loadCryptFileTargets(configXml) {
         var xmlHelpers = context.requireCordovaModule('cordova-common').xmlHelpers;
-
-        var pluginXml = path.join(context.opts.plugin.dir, 'plugin.xml');
 
         var include = [];
         var exclude = [];
 
-        var doc = xmlHelpers.parseElementtreeSync(pluginXml);
+        var doc = xmlHelpers.parseElementtreeSync(configXml);
         var cryptfiles = doc.findall('cryptfiles');
         if (cryptfiles.length > 0) {
             cryptfiles[0]._children.forEach(function(elm) {
