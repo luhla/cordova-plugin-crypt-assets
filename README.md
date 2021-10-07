@@ -26,7 +26,7 @@ or
 
 ### Edit subjects
 
-You can specify the encryption subjects by editing `plugin.xml`.
+You can specify the encryption subjects by editing `config.xml` (not `plugin.xml`).
 
 **config.xml**
 
