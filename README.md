@@ -3,10 +3,11 @@ This is an extension to [tkyaji's cordova-plugin-crypt-file](https://github.com/
 
 The original implementation can also be found on https://www.npmjs.com/package/cordova-plugin-crypt-file.
 
-## Requires node-rsa
+## Requires 
+node-rsa
 `npm install -g node-rsa`
 
-## Requires javascript-obfuscator
+javascript-obfuscator
 `npm install --save-dev javascript-obfuscator`
 
 ## Add Plugin
@@ -40,27 +41,22 @@ You can specify the encryption subjects by editing `config.xml` instead of `plug
 Specify the target file as a regular expression.
 
 ## Encrypt
-`cordova build [ios / android]`
+`cordova [build / prepare / run] android`
 
 ## Obfuscate
 ```
 <obfuscate value="release">
 ```
+obfuscation will be made when --release parametter present
 `cordova [build / prepare / run] [ios / android] --release`
-
 
 ```
 <obfuscate value="always">
-
 ```
+obfuscation will be made always
 `cordova [build / prepare / run] [ios / android]`
 
-
-```
-<obfuscate value="">
-
-```
-no obfuscation
+no value / other value / tag not present - no obfuscation
 
 ## Supported platforms
 * Android - encrypt obfuscate
