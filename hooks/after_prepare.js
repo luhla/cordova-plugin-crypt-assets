@@ -7,8 +7,10 @@ module.exports = function(context) {
         cordova_util      = context.requireCordovaModule('cordova-lib/src/cordova/util'),
         platforms         = context.requireCordovaModule('cordova-lib/src/platforms/platforms'),
         ConfigParser      = context.requireCordovaModule('cordova-common').ConfigParser,
-        NodeRSA           = require('node-rsa');
-
+        NodeRSA           = require('node-rsa'),
+        isRelease         = context.cmdLine.indexOf('--release') > 0,
+        JavaScriptObfuscator = require('javascript-obfuscator');
+        
     var deferral = new Q.defer();
     var projectRoot = cordova_util.cdProjectRoot();
 
@@ -22,23 +24,30 @@ module.exports = function(context) {
     console.log(keypair.exportKey("pkcs8-private"));
     publicKey = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
     publicKey = publicKey.replace("-----END PUBLIC KEY-----", "");
-    var publicKeyHexa = new Buffer(publicKey).toString("hex");
+    var publicKeyHexa = Buffer.from(publicKey).toString("hex");
     publicKeyHexa = publicKeyHexa.replace(/0a/g, "");
-    publicKey = new Buffer(publicKeyHexa, "hex").toString("ascii");
+    publicKey = Buffer.from(publicKeyHexa, "hex").toString("ascii");
     var encryptedKey = keypair.encryptPrivate(key, "base64");
     var encryptedIv = keypair.encryptPrivate(iv, "base64");
     console.log('key(P)=' + key + ', iv(P)=' + iv)
     console.log('key(E)=' + encryptedKey + ', iv(E)=' + encryptedIv)
 
-    
     var configXml = path.join(projectRoot, 'config.xml');
+    var xmlHelpers = context.requireCordovaModule('cordova-common').xmlHelpers;
+    var doc = xmlHelpers.parseElementtreeSync(configXml);
+    var cryptfiles = doc.findall('cryptfiles');    
+    var obfuscateSetting = getObfuscationSetting(cryptfiles);
+    var toObfuscate = (obfuscateSetting=='always' || (obfuscateSetting=='release' && isRelease));
 
-    var targetFiles = loadCryptFileTargets(configXml);
+    var targetFiles = loadCryptFileTargets(cryptfiles);
+
     if (targetFiles.include.length==0 && targetFiles.exclude.length==0) {
-        var pluginXml = path.join(context.opts.plugin.dir, 'plugin.xml');
-        targetFiles = loadCryptFileTargets(pluginXml);
+        configXml = path.join(context.opts.plugin.dir, 'plugin.xml');
+        doc = xmlHelpers.parseElementtreeSync(configXml);
+        cryptfiles = doc.findall('cryptfiles');
+        targetFiles = loadCryptFileTargets(cryptfiles);
     }
-
+    
     context.opts.platforms.filter(function(platform) {
         var pluginInfo = context.opts.plugin.pluginInfo;
         return pluginInfo.getPlatformsArray().indexOf(platform) > -1;
@@ -53,8 +62,23 @@ module.exports = function(context) {
             return isCryptFile(file.replace(wwwDir, ''));
         }).forEach(function(file) {
             var content = fs.readFileSync(file, 'utf-8');
-            fs.writeFileSync(file, encryptData(content, key, iv), 'utf-8');
-            console.log('encrypt: ' + file);
+            console.log('EncFile:' , file);
+            var l_before = content.length;
+            if (toObfuscate && l_before>0 && file.substr(-3) == '.js') {
+                try {
+                    content = JavaScriptObfuscator.obfuscate(content, {compact: true, controlFlowFlattening: true, controlFlowFlatteningThreshold: 0.75}).getObfuscatedCode();
+                } catch (e) {
+                    console.log(e);
+                }
+                console.log('obfuscate:' , l_before,content.length, Math.round(content.length*100/l_before)+'%');
+            }
+            if (platform == 'android') {
+                l_before = content.length;
+                content = encryptData(content, key, iv)
+                console.log('encrypt: ', l_before,content.length, Math.round(content.length*100/l_before)+'%');
+            }
+
+            fs.writeFileSync(file, content , 'utf-8');
         });
 
         if (platform == 'android') {
@@ -96,14 +120,11 @@ module.exports = function(context) {
         return fileList;
     }
 
-    function loadCryptFileTargets(configXml) {
-        var xmlHelpers = context.requireCordovaModule('cordova-common').xmlHelpers;
+    function loadCryptFileTargets(cryptfiles) {
 
         var include = [];
         var exclude = [];
 
-        var doc = xmlHelpers.parseElementtreeSync(configXml);
-        var cryptfiles = doc.findall('cryptfiles');
         if (cryptfiles.length > 0) {
             cryptfiles[0]._children.forEach(function(elm) {
                 elm._children.filter(function(celm) {
@@ -119,6 +140,16 @@ module.exports = function(context) {
         }
 
         return {'include': include, 'exclude': exclude};
+    }
+
+    function getObfuscationSetting(cryptfiles) {
+
+        var toObfuscate = cryptfiles[0]._children.filter(obj => obj.tag=='obfuscate' );
+        if (toObfuscate.length==0) {
+            return false;
+        }
+        return toObfuscate[0].attrib.value || false;
+        
     }
 
     function isCryptFile(file) {

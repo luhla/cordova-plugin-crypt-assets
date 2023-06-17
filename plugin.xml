@@ -17,6 +17,9 @@
 		
         <source-file src="src/android/com/qhng/cordova/DecryptResourceNG.java" target-dir="src/com/qhng/cordova" />
     </platform>
+    
+    <platform name="ios">
+    </platform>
 
      <cryptfiles>
         <include>
@@ -24,6 +27,8 @@
         </include>
         <exclude>
         </exclude>
+        <!-- release laways none -->
+        <obfuscate value="release" />
     </cryptfiles>
 
     <hook type="after_prepare" src="hooks/after_prepare.js" />

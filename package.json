@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-crypt-assets",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Cordova plugin to encrypt/decrypt the source assets.",
   "repository": {
     "type": "git",
@@ -12,8 +12,9 @@
     "assets-encryption"
   ],
   "dependencies": {
-    "node-rsa": "0.4.2"
+    "node-rsa": "0.4.2",
+    "javascript-obfuscator": "4.0.1"
   },
-  "author": "tkyaji, qhng, naveed-ahmad",
+  "author": "tkyaji, qhng, naveed-ahmad, luhla",
   "license": "Apache version 2.0"
 }
