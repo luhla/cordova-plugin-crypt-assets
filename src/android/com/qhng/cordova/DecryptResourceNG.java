@@ -48,7 +48,8 @@ public class DecryptResourceNG extends CordovaPlugin {
     public Uri remapUri(Uri uri) {
         LOG.d(TAG, "remapUri: " + uri.toString());
         if (uri.toString().indexOf("/+++/") > -1) {
-            return this.toPluginUri(uri);
+            // sanitize uri to remove query and hash
+            return this.toPluginUri( Uri.parse( uri.toString().replace("?", "#").split("#")[0]));
         } else {
             return uri;
         }
